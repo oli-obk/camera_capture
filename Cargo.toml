@@ -1,0 +1,12 @@
+[package]
+name = "video_input"
+version = "0.1.0"
+authors = ["Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>"]
+
+build = "build.rs"
+
+[build-dependencies]
+pkg-config = "0.3.8"
+
+[dependencies]
+rscam = "0.5.2"
