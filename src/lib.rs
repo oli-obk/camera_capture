@@ -25,34 +25,68 @@ pub fn create<P: AsRef<Path>>(p: P) -> std::io::Result<Builder> {
 
 #[derive(Debug)]
 pub enum FpsError {
-    Negative,
-    ResolutionTooHigh,
+    InvalidFps(rscam::IntervalInfo),
+    Io(std::io::Error),
 }
 
 #[derive(Debug)]
 pub enum ResolutionError {
-    ZeroSized,
+    InvalidResolution(rscam::ResolutionInfo),
+    Io(std::io::Error),
 }
 
 impl Builder {
     pub fn fps(mut self, fps: f64) -> Result<Self, FpsError> {
-        if fps < 0.0 {
-            return Err(FpsError::Negative);
-        }
-        self.fps = (10, (fps * 10.0) as u32);
-        if self.fps.0 == 0 || self.fps.1 == 0 {
-            Err(FpsError::ResolutionTooHigh)
+        if fps < 5.0 {
+            self.fps = (1000, (fps * 1000.0) as u32);
         } else {
-            Ok(self)
+            self.fps = (1, fps as u32);
         }
+        let intervals = match self.camera.intervals(b"RGB3", self.resolution) {
+            Ok(intervals) => intervals,
+            Err(rscam::Error::Io(io)) => return Err(FpsError::Io(io)),
+            _ => unreachable!(),
+        };
+        match intervals {
+            rscam::IntervalInfo::Discretes(ref v) => for &(a, b) in v {
+                if a == self.fps.0 && b == self.fps.1 {
+                    return Ok(self);
+                }
+            },
+            rscam::IntervalInfo::Stepwise { min, max, step } => {
+                if ((self.fps.0 - min.0) / step.0) * step.0 + min.0 == self.fps.0
+                && ((self.fps.1 - min.1) / step.1) * step.1 + min.1 == self.fps.1
+                && max.0 >= self.fps.0
+                && max.1 >= self.fps.1 {
+                    return Ok(self);
+                }
+            }
+        }
+        Err(FpsError::InvalidFps(intervals))
     }
     pub fn resolution(mut self, wdt: u32, hgt: u32) -> Result<Self, ResolutionError> {
         self.resolution = (wdt, hgt);
-        if wdt == 0 || hgt == 0 {
-            Err(ResolutionError::ZeroSized)
-        } else {
-            Ok(self)
+        let res = match self.camera.resolutions(b"RGB3") {
+            Ok(res) => res,
+            Err(rscam::Error::Io(io)) => return Err(ResolutionError::Io(io)),
+            _ => unreachable!(),
+        };
+        match res {
+            rscam::ResolutionInfo::Discretes(ref v) => for &(w, h) in v {
+                if w == wdt && h == hgt {
+                    return Ok(self);
+                }
+            },
+            rscam::ResolutionInfo::Stepwise { min, max, step } => {
+                if ((wdt - min.0) / step.0) * step.0 + min.0 == wdt
+                && ((hgt - min.1) / step.1) * step.1 + min.1 == hgt
+                && max.0 >= wdt
+                && max.1 >= hgt {
+                    return Ok(self);
+                }
+            }
         }
+        Err(ResolutionError::InvalidResolution(res))
     }
     pub fn start(mut self) -> std::io::Result<ImageIterator> {
         match self.camera.start(&rscam::Config {
