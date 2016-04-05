@@ -69,10 +69,10 @@ impl Builder {
 }
 
 impl Iterator for ImageIterator {
-    type Item = image::RgbImage;
+    type Item = image::ImageBuffer<image::Rgb<u8>, rscam::Frame>;
     fn next(&mut self) -> Option<Self::Item> {
         match self.camera.capture() {
-            Ok(frame) => image::ImageBuffer::from_raw(frame.resolution.0, frame.resolution.1, frame.to_owned()),
+            Ok(frame) => image::ImageBuffer::from_raw(frame.resolution.0, frame.resolution.1, frame),
             Err(_) => None,
         }
     }
