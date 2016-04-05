@@ -10,3 +10,4 @@ pkg-config = "0.3.8"
 
 [dependencies]
 rscam = "0.5.2"
+image = "0.7"
