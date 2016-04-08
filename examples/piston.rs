@@ -17,7 +17,7 @@ fn main() {
     let (sender, receiver) = std::sync::mpsc::channel();
     let imgthread = std::thread::spawn(move || {
         let cam = video_input::create("/dev/video0").unwrap()
-                                                    .fps(30.0)
+                                                    .fps(5.0)
                                                     .unwrap()
                                                     .start()
                                                     .unwrap();

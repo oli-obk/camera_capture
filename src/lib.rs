@@ -4,6 +4,8 @@ extern crate image;
 use std::path::Path;
 use std::default::Default;
 
+pub use rscam::Frame;
+
 pub struct ImageIterator {
     camera: rscam::Camera,
 }
