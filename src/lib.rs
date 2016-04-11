@@ -26,19 +26,20 @@ pub fn create<P: AsRef<Path>>(p: P) -> std::io::Result<Builder> {
 }
 
 #[derive(Debug)]
-pub enum FpsError {
+pub enum Error {
     InvalidFps(rscam::IntervalInfo),
-    Io(std::io::Error),
-}
-
-#[derive(Debug)]
-pub enum ResolutionError {
     InvalidResolution(rscam::ResolutionInfo),
     Io(std::io::Error),
 }
 
+impl From<std::io::Error> for Error {
+    fn from(err: std::io::Error) -> Error {
+        Error::Io(err)
+    }
+}
+
 impl Builder {
-    pub fn fps(mut self, fps: f64) -> Result<Self, FpsError> {
+    pub fn fps(mut self, fps: f64) -> Result<Self, Error> {
         if fps < 5.0 {
             self.fps = (1000, (fps * 1000.0) as u32);
         } else {
@@ -46,7 +47,7 @@ impl Builder {
         }
         let intervals = match self.camera.intervals(b"RGB3", self.resolution) {
             Ok(intervals) => intervals,
-            Err(rscam::Error::Io(io)) => return Err(FpsError::Io(io)),
+            Err(rscam::Error::Io(io)) => return Err(Error::Io(io)),
             _ => unreachable!(),
         };
         match intervals {
@@ -64,13 +65,13 @@ impl Builder {
                 }
             }
         }
-        Err(FpsError::InvalidFps(intervals))
+        Err(Error::InvalidFps(intervals))
     }
-    pub fn resolution(mut self, wdt: u32, hgt: u32) -> Result<Self, ResolutionError> {
+    pub fn resolution(mut self, wdt: u32, hgt: u32) -> Result<Self, Error> {
         self.resolution = (wdt, hgt);
         let res = match self.camera.resolutions(b"RGB3") {
             Ok(res) => res,
-            Err(rscam::Error::Io(io)) => return Err(ResolutionError::Io(io)),
+            Err(rscam::Error::Io(io)) => return Err(Error::Io(io)),
             _ => unreachable!(),
         };
         match res {
@@ -88,7 +89,7 @@ impl Builder {
                 }
             }
         }
-        Err(ResolutionError::InvalidResolution(res))
+        Err(Error::InvalidResolution(res))
     }
     pub fn start(mut self) -> std::io::Result<ImageIterator> {
         match self.camera.start(&rscam::Config {
