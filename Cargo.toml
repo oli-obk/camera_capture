@@ -1,5 +1,5 @@
 [package]
-name = "video_input"
+name = "camera_capture"
 version = "0.1.0"
 authors = ["Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>"]
 
