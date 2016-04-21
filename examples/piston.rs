@@ -1,4 +1,4 @@
-extern crate video_input;
+extern crate camera_capture;
 extern crate piston_window;
 extern crate image;
 extern crate texture;
@@ -16,7 +16,7 @@ fn main() {
     let mut tex: Option<Texture<_>> = None;
     let (sender, receiver) = std::sync::mpsc::channel();
     let imgthread = std::thread::spawn(move || {
-        let cam = video_input::create("/dev/video0").unwrap()
+        let cam = camera_capture::create(0).unwrap()
                                                     .fps(5.0)
                                                     .unwrap()
                                                     .start()

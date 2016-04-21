@@ -1,10 +1,10 @@
 [package]
 name = "camera_capture"
-version = "0.1.1"
+version = "0.2.2"
 authors = ["Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>"]
 license = "MIT"
-description = "capture webcam images on linux (windows WIP)"
-keywords = ["webcam", "v4l", "v4l2", "capture", "camera"]
+description = "capture webcam images on linux and windows"
+keywords = ["webcam", "v4l", "capture", "camera", "mf"]
 repository = "https://github.com/oli-obk/camera_capture"
 
 build = "build.rs"
@@ -16,7 +16,8 @@ pkg-config = "0.3.8"
 image = "0.7"
 
 [target.'cfg(windows)'.dependencies]
-escapi = "3"
+escapi = "3.0.5"
+lazy_static = "0.2.0"
 
 [target.'cfg(unix)'.dependencies]
 rscam = "0.5.2"
