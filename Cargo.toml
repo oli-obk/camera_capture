@@ -1,6 +1,6 @@
 [package]
 name = "camera_capture"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>"]
 license = "MIT"
 description = "capture webcam images on linux (windows WIP)"
