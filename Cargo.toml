@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>"]
 license = "MIT"
 description = "capture webcam images on linux (windows WIP)"
-tags = ["webcam", "v4l", "v4l2", "capture", "camera"]
+keywords = ["webcam", "v4l", "v4l2", "capture", "camera"]
 repository = "https://github.com/oli-obk/camera_capture"
 
 build = "build.rs"
