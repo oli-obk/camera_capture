@@ -13,8 +13,13 @@ build = "build.rs"
 pkg-config = "0.3.8"
 
 [dependencies]
-rscam = "0.5.2"
 image = "0.7"
+
+[target.'cfg(windows)'.dependencies]
+escapi = "3"
+
+[target.'cfg(unix)'.dependencies]
+rscam = "0.5.2"
 
 [dev-dependencies]
 piston_window = "0.40"
