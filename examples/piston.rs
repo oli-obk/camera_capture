@@ -1,13 +1,12 @@
 extern crate camera_capture;
 extern crate piston_window;
 extern crate image;
-extern crate texture;
 
 use piston_window::{PistonWindow, Texture, WindowSettings, TextureSettings, clear};
 use image::ConvertBuffer;
 
 fn main() {
-    let window: PistonWindow =
+    let mut window: PistonWindow =
         WindowSettings::new("piston: image", [300, 300])
         .exit_on_esc(true)
         .build()
@@ -28,16 +27,16 @@ fn main() {
         }
     });
 
-    for e in window {
+    while let Some(e) = window.next() {
         if let Ok(frame) = receiver.try_recv() {
             if let Some(mut t) = tex {
-                t.update(&mut *e.encoder.borrow_mut(), &frame).unwrap();
+                t.update(&mut window.encoder, &frame).unwrap();
                 tex = Some(t);
             } else {
-                tex = Texture::from_image(&mut *e.factory.borrow_mut(), &frame, &TextureSettings::new()).ok();
+                tex = Texture::from_image(&mut window.factory, &frame, &TextureSettings::new()).ok();
             }
         }
-        e.draw_2d(|c, g| {
+        window.draw_2d(&e,|c, g| {
             clear([1.0; 4], g);
             if let Some(ref t) = tex {
                 piston_window::image(t, c.transform, g);
