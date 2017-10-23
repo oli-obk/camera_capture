@@ -4,8 +4,6 @@ extern crate image;
 use std::fs::File;
 use std::path::Path;
 
-use image::GenericImage;
-
 fn main() {
     let cam = camera_capture::create(0).unwrap();
     
