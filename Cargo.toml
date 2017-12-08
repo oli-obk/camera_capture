@@ -25,3 +25,5 @@ rscam = "0.5.3"
 [dev-dependencies]
 piston_window = "0.73.0"
 piston-texture = "0.6.0"
+glium = "0.18.1"
+failure = "0.1.1"
