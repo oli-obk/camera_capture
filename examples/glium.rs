@@ -83,7 +83,7 @@ fn run() -> Result<(), Error> {
                 match event {
                     // Stop the application when the close-button is clicked or
                     // ESC is pressed
-                    glutin::WindowEvent::Closed |
+                    glutin::WindowEvent::CloseRequested |
                     glutin::WindowEvent::KeyboardInput {
                         input: glutin::KeyboardInput {
                             state: ElementState::Pressed,

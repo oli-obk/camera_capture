@@ -10,20 +10,20 @@ repository = "https://github.com/oli-obk/camera_capture"
 build = "build.rs"
 
 [build-dependencies]
-pkg-config = "0.3.9"
+pkg-config = "0.3.14"
 
 [dependencies]
-image = "0.17.0"
+image = "0.21.1"
 
 [target.'cfg(windows)'.dependencies]
 escapi = "3.0.5"
 lazy_static = "0.2.10"
 
 [target.'cfg(unix)'.dependencies]
-rscam = "0.5.3"
+rscam = "0.5.4"
 
 [dev-dependencies]
-piston_window = "0.73.0"
+piston_window = "0.89.0"
 piston-texture = "0.6.0"
-glium = "0.18.1"
-failure = "0.1.1"
+glium = "0.24.0"
+failure = "0.1.5"
