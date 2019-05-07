@@ -1,8 +1,6 @@
-extern crate escapi;
-#[macro_use]
-extern crate lazy_static;
+use lazy_static::lazy_static;
 
-use error::Error;
+use crate::error::Error;
 
 pub type Frame = Vec<u8>;
 

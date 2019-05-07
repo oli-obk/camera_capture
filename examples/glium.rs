@@ -19,7 +19,7 @@ use image::{ImageBuffer, Rgb};
 fn main() {
     if let Err(e) = run() {
         eprintln!("An error occured: {}", e);
-        for cause in e.causes().skip(1) {
+        for cause in e.iter_chain().skip(1) {
             eprintln!("... caused by: {}", cause);
         }
     }

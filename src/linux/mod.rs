@@ -1,8 +1,6 @@
-extern crate rscam;
-
 use std::default::Default;
 
-use error::Error;
+use crate::error::Error;
 
 pub type Frame = rscam::Frame;
 
@@ -18,7 +16,7 @@ pub struct Builder {
 
 pub fn create(i: u32) -> std::io::Result<Builder> {
     Ok(Builder {
-        camera: try!(rscam::Camera::new(&format!("/dev/video{}", i))),
+        camera: rscam::Camera::new(&format!("/dev/video{}", i))?,
         resolution: (640, 480),
         fps: (1, 10),
     })
