@@ -122,7 +122,7 @@ pub fn start_webcam() -> Result<(Receiver<CamFrame>, JoinHandle<()>), Error> {
 
     let webcam_thread = thread::spawn(move || {
         for frame in cam {
-            if let Err(_) = sender.send(frame) {
+            if sender.send(frame).is_err() {
                 break;
             }
         }
@@ -135,7 +135,7 @@ pub fn stop_webcam(receiver: Receiver<CamFrame>, thread: JoinHandle<()>) {
     // We close our channel which will cause the other thread to stop itself.
     // The main thread then just waits for this to happen.
     drop(receiver);
-    if let Err(_) = thread.join() {
+    if thread.join().is_err() {
         eprintln!("The webcam thread panicked before we tried to join it...");
     }
 }
@@ -233,5 +233,5 @@ pub fn create_program<F: Facade>(display: &F) -> Result<Program, Error> {
                 }
             "
         },
-    ).map_err(|e| e.into())
+    ).map_err(std::convert::Into::into)
 }

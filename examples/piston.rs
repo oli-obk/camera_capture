@@ -21,7 +21,7 @@ fn main() {
                                                     .start()
                                                     .unwrap();
         for frame in cam {
-            if let Err(_) = sender.send(frame.convert()) {
+            if sender.send(frame.convert()).is_err() {
                 break;
             }
         }
