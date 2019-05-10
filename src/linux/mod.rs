@@ -51,7 +51,7 @@ impl Builder {
                         return Ok(self);
                     }
                 }
-                Err(Error::InvalidFps(v.iter().map(|&(a, b)| a as f64 / b as f64).collect()))
+                Err(Error::InvalidFps(v.iter().map(|&(a, b)| f64::from(a / b)).collect()))
             }
             rscam::IntervalInfo::Stepwise { min, max, step } => {
                 if ((self.fps.0 - min.0) / step.0) * step.0 + min.0 == self.fps.0
@@ -60,7 +60,7 @@ impl Builder {
                     && max.1 >= self.fps.1 {
                     Ok(self)
                 } else {
-                    Err(Error::InvalidFps([min, max].iter().map(|&(a, b)| a as f64 / b as f64).collect()))
+                    Err(Error::InvalidFps([min, max].iter().map(|&(a, b)| f64::from(a / b)).collect()))
                 }
             }
         }
