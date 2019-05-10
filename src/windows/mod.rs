@@ -1,5 +1,3 @@
-use lazy_static::*;
-
 use crate::error::Error;
 
 pub type Frame = Vec<u8>;
@@ -52,10 +50,7 @@ impl Builder {
     }
 
     pub fn start(self) -> std::io::Result<ImageIterator> {
-        lazy_static! {
-            static ref CAMERAS: escapi::Cameras = escapi::init().unwrap();
-        }
-        match CAMERAS.init(self.camera_id, self.resolution.0, self.resolution.1, 10) {
+        match escapi::init(self.camera_id, self.resolution.0, self.resolution.1, 10) {
             Ok(cam) => Ok(ImageIterator {
                 camera: cam,
             }),
