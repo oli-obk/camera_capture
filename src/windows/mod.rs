@@ -3,7 +3,7 @@ use crate::error::Error;
 pub type Frame = Vec<u8>;
 
 pub struct ImageIterator {
-    camera: escapi::Device<'static>,
+    camera: escapi::Device,
 }
 
 pub struct Builder {
