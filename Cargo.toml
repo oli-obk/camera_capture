@@ -6,6 +6,7 @@ license = "MIT"
 description = "capture webcam images on linux and windows"
 keywords = ["webcam", "v4l", "capture", "camera", "mf"]
 repository = "https://github.com/oli-obk/camera_capture"
+edition = "2018"
 
 build = "build.rs"
 
@@ -16,8 +17,7 @@ pkg-config = "0.3.14"
 image = "0.21.1"
 
 [target.'cfg(windows)'.dependencies]
-escapi = "3.0.5"
-lazy_static = "0.2.10"
+escapi = "4"
 
 [target.'cfg(unix)'.dependencies]
 rscam = "0.5.4"

@@ -1,8 +1,6 @@
-extern crate rscam;
-
 use std::default::Default;
 
-use error::Error;
+use crate::error::Error;
 
 pub type Frame = rscam::Frame;
 
@@ -18,7 +16,7 @@ pub struct Builder {
 
 pub fn create(i: u32) -> std::io::Result<Builder> {
     Ok(Builder {
-        camera: try!(rscam::Camera::new(&format!("/dev/video{}", i))),
+        camera: rscam::Camera::new(&format!("/dev/video{}", i))?,
         resolution: (640, 480),
         fps: (1, 10),
     })
@@ -53,7 +51,7 @@ impl Builder {
                         return Ok(self);
                     }
                 }
-                Err(Error::InvalidFps(v.iter().map(|&(a, b)| a as f64 / b as f64).collect()))
+                Err(Error::InvalidFps(v.iter().map(|&(a, b)| f64::from(a / b)).collect()))
             }
             rscam::IntervalInfo::Stepwise { min, max, step } => {
                 if ((self.fps.0 - min.0) / step.0) * step.0 + min.0 == self.fps.0
@@ -62,7 +60,7 @@ impl Builder {
                     && max.1 >= self.fps.1 {
                     Ok(self)
                 } else {
-                    Err(Error::InvalidFps([min, max].iter().map(|&(a, b)| a as f64 / b as f64).collect()))
+                    Err(Error::InvalidFps([min, max].iter().map(|&(a, b)| f64::from(a / b)).collect()))
                 }
             }
         }

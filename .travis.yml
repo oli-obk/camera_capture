@@ -3,9 +3,14 @@ rust:
   - stable
   - beta
   - nightly
+os:
+  - windows
+  - linux
 matrix:
   allow_failures:
     - rust: nightly
-before_install:
-  - sudo apt-get install -y libv4l-dev
-  
+addons:
+  apt:
+    packages:
+    - libv4l-dev
+

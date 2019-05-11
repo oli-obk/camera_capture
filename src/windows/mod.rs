@@ -1,13 +1,9 @@
-extern crate escapi;
-#[macro_use]
-extern crate lazy_static;
-
-use error::Error;
+use crate::error::Error;
 
 pub type Frame = Vec<u8>;
 
 pub struct ImageIterator {
-    camera: escapi::Device<'static>,
+    camera: escapi::Device,
 }
 
 pub struct Builder {
@@ -25,9 +21,9 @@ pub fn create(i: u32) -> std::io::Result<Builder> {
 impl Iterator for ImageIterator {
     type Item = image::ImageBuffer<image::Rgb<u8>, Frame>;
     fn next(&mut self) -> Option<Self::Item> {
-        let wdt = self.camera.width();
-        let hgt = self.camera.height();
-        match self.camera.capture(50) {
+        let wdt = self.camera.capture_width();
+        let hgt = self.camera.capture_height();
+        match self.camera.capture() {
             Ok(frame) => {
                 let len = (wdt * hgt) as usize;
                 let mut buf = vec![0; len * 3];
@@ -54,10 +50,7 @@ impl Builder {
     }
 
     pub fn start(self) -> std::io::Result<ImageIterator> {
-        lazy_static! {
-            static ref CAMERAS: escapi::Cameras = escapi::init().unwrap();
-        }
-        match CAMERAS.init(self.camera_id, self.resolution.0, self.resolution.1, 10) {
+        match escapi::init(self.camera_id as usize, self.resolution.0, self.resolution.1, 10) {
             Ok(cam) => Ok(ImageIterator {
                 camera: cam,
             }),
