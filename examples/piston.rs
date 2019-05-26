@@ -14,12 +14,17 @@ fn main() {
     let mut tex: Option<Texture<_>> = None;
     let (sender, receiver) = std::sync::mpsc::channel();
     let imgthread = std::thread::spawn(move || {
-        let res = camera_capture::create(0);
-        if let Err(e) = res {
+        let res1 = camera_capture::create(0);
+        if let Err(e) = res1 {
             eprintln!("could not open camera: {}", e);
             std::process::exit(1);
         }
-        let cam = res.unwrap().fps(5.0).unwrap().start().unwrap();
+        let res2 = res1.unwrap().fps(5.0).unwrap().start();
+        if let Err(e) = res2 {
+            eprintln!("could retrieve data from camera: {}", e);
+            std::process::exit(2);
+        }
+        let cam = res2.unwrap();
         for frame in cam {
             if sender.send(frame.convert()).is_err() {
                 break;
