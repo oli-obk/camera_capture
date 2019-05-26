@@ -27,4 +27,5 @@ fn main() {
 
 ## Piston Example
 
-[In the examples directory](https://github.com/oli-obk/camera_capture/blob/master/examples/piston.rs)
+* run via `cargo run --example piston`
+* [source](https://github.com/oli-obk/camera_capture/blob/master/examples/piston.rs)
