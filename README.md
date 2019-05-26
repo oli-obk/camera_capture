@@ -10,6 +10,9 @@ v4l2 on Linux. OSX is not supported.
 * [ ] threaded access through channel `Receiver`
 * [ ] automatic webcam detection and selection
 
+## Documentation
+You can create the documentation (locally) by executing `cargo doc --no-deps --open`.
+
 ## Example
 
 ```rust
