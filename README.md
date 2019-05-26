@@ -3,7 +3,7 @@
 ## Description
 
 Captures webcam images and offers access to them through an iterator. Works with
-v4l2 on linux.
+v4l2 on Linux. OSX is not supported.
 
 ## TODO
 
@@ -27,4 +27,5 @@ fn main() {
 
 ## Piston Example
 
-[In the examples directory](https://github.com/oli-obk/camera_capture/blob/master/examples/piston.rs)
+* run via `cargo run --example piston`
+* [source](https://github.com/oli-obk/camera_capture/blob/master/examples/piston.rs)
